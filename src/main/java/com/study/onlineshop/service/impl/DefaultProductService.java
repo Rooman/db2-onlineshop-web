@@ -3,13 +3,21 @@ package com.study.onlineshop.service.impl;
 import com.study.onlineshop.dao.ProductDao;
 import com.study.onlineshop.entity.Product;
 import com.study.onlineshop.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class DefaultProductService implements ProductService {
+
     private ProductDao productDao;
 
-    public DefaultProductService(ProductDao productDao) {
+    @Autowired
+    @Qualifier("jdbcProductDao")
+    public void setProductDao(ProductDao productDao) {
         this.productDao = productDao;
     }
 

@@ -1,10 +1,10 @@
 package com.study.onlineshop.web.filter;
 
-import com.study.onlineshop.ServiceLocator;
 import com.study.onlineshop.entity.UserRole;
 import com.study.onlineshop.security.SecurityService;
 import com.study.onlineshop.security.Session;
-import com.study.onlineshop.web.service.CookieService;
+import com.study.onlineshop.web.util.WebUtil;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
@@ -14,14 +14,17 @@ import java.io.IOException;
 import java.util.EnumSet;
 
 public class UserRoleSecurityFilter implements Filter {
+
     private SecurityService securityService;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        securityService = ServiceLocator.getServiceLocator().getService(SecurityService.class);
+        securityService =
+                WebApplicationContextUtils.
+                        getRequiredWebApplicationContext(filterConfig.getServletContext()).
+                        getBean(SecurityService.class);
     }
 
-    // chain of responsibility
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
@@ -30,7 +33,7 @@ public class UserRoleSecurityFilter implements Filter {
         Cookie[] cookies = httpServletRequest.getCookies();
         boolean isAuth = false;
 
-        String token = CookieService.getTokenFromCookies(cookies);
+        String token = WebUtil.getTokenFromCookies(cookies);
         Session session = null;
         if (token != null) {
             session = securityService.getSession(token);

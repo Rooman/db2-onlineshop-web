@@ -5,6 +5,7 @@ import com.study.onlineshop.entity.User;
 import com.study.onlineshop.entity.UserRole;
 import com.study.onlineshop.exception.UserExistsException;
 import com.study.onlineshop.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -13,13 +14,11 @@ import java.util.List;
 import java.util.UUID;
 
 public class DefaultUserService implements UserService {
+
+    @Autowired
     private UserDao userDao;
     private static final String HASH_ALGORITM = "SHA-256";
     private static final UserRole DEFAULT_USER_ROLE = UserRole.USER;
-
-    public DefaultUserService(UserDao userDao) {
-        this.userDao = userDao;
-    }
 
     @Override
     public User getUser(String login, String password) {

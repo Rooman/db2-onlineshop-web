@@ -11,22 +11,17 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:component-scan base-package="com.study.onlineshop.web.controller"/>
+    <context:component-scan base-package="com.study.onlineshop"/>
+    <context:property-placeholder location="classpath:application.properties" />
     <mvc:annotation-driven/>
 
-    <bean id="productService" class="com.study.onlineshop.service.impl.DefaultProductService">
-        <constructor-arg ref="productDao"/>
-    </bean>
+    <bean id="userRoleSecurityFilter" class="com.study.onlineshop.web.filter.UserRoleSecurityFilter" />
+    <bean id="adminRoleSecurityFilter" class="com.study.onlineshop.web.filter.AdminRoleSecurityFilter" />
 
-    <bean id="productDao" class="com.study.onlineshop.dao.jdbc.JdbcProductDao">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
-
+    <!-- Migrate to Apache Common DataSource please!!! -->
     <bean id="dataSource" class="org.postgresql.ds.PGSimpleDataSource">
-        <property name="url"
-                  value="jdbc:postgresql://ec2-79-125-14-195.eu-west-1.compute.amazonaws.com:5432/deb3hncattbhjl"/>
-        <property name="user" value="qrdyhqwmsdxghu"/>
-        <property name="password" value="e5e359a9d803e2e0c1f489cb076feeeb356b2eeffc019dceba7fed7c6ba5aec6"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="user" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
     </bean>
-
 </beans>
